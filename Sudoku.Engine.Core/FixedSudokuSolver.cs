@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using Sudoku.Engine.Core.Contracts;
+﻿using Sudoku.Engine.Core.Contracts;
 
 namespace Sudoku.Engine.Core
 {

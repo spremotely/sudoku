@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Linq;
-using Newtonsoft.Json;
 using Sudoku.Engine.Core.Contracts;
 using Sudoku.Engine.Core.Exceptions;
 
