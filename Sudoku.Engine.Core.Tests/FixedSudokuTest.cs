@@ -22,5 +22,13 @@ namespace Sudoku.Engine.Core.Tests
             _sudokuGame.AddNumber(0, 1, 2, Guid.NewGuid());
             Assert.True(_sudokuGame.Solve());
         }
+
+        [Fact]
+        public void TestSolve_WrongSolution()
+        {
+            _sudokuGame.NewGame();
+            _sudokuGame.AddNumber(1, 4, 2, Guid.NewGuid());
+            Assert.False(_sudokuGame.Solve());
+        }
     }
 }
