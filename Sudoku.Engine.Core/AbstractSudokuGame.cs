@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using Sudoku.Engine.Core.Contracts;
 using Sudoku.Engine.Core.Exceptions;
 
@@ -15,9 +16,8 @@ namespace Sudoku.Engine.Core
             Solver = solver;
         }
 
-
-        public int[,] Sudoku { get; protected set; }
-        public bool IsActive { get; protected set; }
+        protected virtual int[,] Sudoku { get; set; }
+        protected bool IsActive { get; set; }
 
         public virtual void NewGame()
         {
@@ -39,15 +39,19 @@ namespace Sudoku.Engine.Core
 
         public virtual bool Solve()
         {
+            if (!IsActive)
+            {
+                throw new AbstractSudokuGameException("sudoku is not active");
+            }
+
             return Solver.Solve(Sudoku);
         }
 
-        public virtual void AddNumber(int row, int col, int value, Guid userGuid)
+        public virtual void AddNumber(int row, int column, int value, Guid userGuid)
         {
             if (!IsActive)
             {
-                var exception = new AbstractSudokuGameException("game is not active");
-                throw exception;
+                throw new AbstractSudokuGameException("sudoku is not active");
             }
 
             if (value < 1 || value > Sudoku.GetLength(0))
@@ -58,11 +62,28 @@ namespace Sudoku.Engine.Core
                 throw exception;
             }
 
-            Sudoku[row, col] = value;
+            Sudoku[row, column] = value;
         }
 
-        public abstract void Join(Guid userGuid);
+        public virtual void Join(Guid userGuid)
+        {
+            if (!IsActive)
+            {
+                throw new AbstractSudokuGameException("sudoku is not active");
+            }
+        }
 
-        public abstract void Leave(Guid userGuid);
+        public virtual void Leave(Guid userGuid)
+        {
+            if (!IsActive)
+            {
+                throw new AbstractSudokuGameException("sudoku is not active");
+            }
+        }
+
+        protected bool IsDone()
+        {
+            return Sudoku.Cast<int>().All(value => value != 0);
+        }
     }
 }

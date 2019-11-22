@@ -3,17 +3,17 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29020.237
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sudoku.App", "Sudoku.App\Sudoku.App.csproj", "{246736E1-5EBB-4252-A60C-38612FDB7C77}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sudoku.App", "Sudoku.App\Sudoku.App.csproj", "{246736E1-5EBB-4252-A60C-38612FDB7C77}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sudoku.Engine.Core.Contracts", "Sudoku.Engine.Core.Contracts\Sudoku.Engine.Core.Contracts.csproj", "{BBB695CF-9170-4F7F-969B-31EF3117BADF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sudoku.Engine.Core.Contracts", "Sudoku.Engine.Core.Contracts\Sudoku.Engine.Core.Contracts.csproj", "{BBB695CF-9170-4F7F-969B-31EF3117BADF}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Core", "Core", "{D318074E-0AB9-45DE-93FE-802D50EC56D1}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Engine", "Engine", "{E2D7BD02-E876-498A-89CA-BD266B2499B0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sudoku.Engine.Core", "Sudoku.Engine.Core\Sudoku.Engine.Core.csproj", "{E141B000-A37B-4126-9611-401707546480}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sudoku.Engine.Core", "Sudoku.Engine.Core\Sudoku.Engine.Core.csproj", "{E141B000-A37B-4126-9611-401707546480}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sudoku.Engine.Core.Tests", "Sudoku.Engine.Core.Tests\Sudoku.Engine.Core.Tests.csproj", "{1F2FF8A7-0994-40C0-89B9-EA980AED2B68}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sudoku.Engine.Core.Tests", "Sudoku.Engine.Core.Tests\Sudoku.Engine.Core.Tests.csproj", "{1F2FF8A7-0994-40C0-89B9-EA980AED2B68}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
