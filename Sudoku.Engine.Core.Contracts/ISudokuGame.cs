@@ -1,4 +1,5 @@
 ﻿using System;
+using Sudoku.Engine.Core.Contracts.Models;
 
 namespace Sudoku.Engine.Core.Contracts
 {
@@ -7,7 +8,7 @@ namespace Sudoku.Engine.Core.Contracts
         void NewGame();
         bool Solve();
         void Join(Guid userGuid);
-        void AddNumber(int row, int column, int value, Guid userGuid);
+        void AddNumber(ISudokuNumber number);
         void Leave(Guid userGuid);
     }
 }

@@ -1,15 +1,19 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Threading;
+using Sudoku.Engine.Core.Concurrent.Events;
 using Sudoku.Engine.Core.Contracts;
 using Sudoku.Engine.Core.Contracts.Models;
-using Sudoku.Engine.Core.Models;
 
-namespace Sudoku.Engine.Core
+namespace Sudoku.Engine.Core.Concurrent
 {
     public class ConcurrentSudokuGame : AbstractSudokuGame
     {
         protected BlockingCollection<ISudokuNumber> ConcurrentNumbersQueue;
+
+        public delegate void NewGameHandler(object sender, NewGameEventArgs e);
+
+        public event NewGameHandler OnNewGame;
 
         public ConcurrentSudokuGame(ISudokuGenerator generator, ISudokuSolver solver) : base(generator, solver)
         {
@@ -22,6 +26,8 @@ namespace Sudoku.Engine.Core
             ConcurrentNumbersQueue = new BlockingCollection<ISudokuNumber>();
             var queueDispatcherThread = new Thread(QueueDispatcher);
             queueDispatcherThread.Start();
+
+            OnNewGame?.Invoke(this, new NewGameEventArgs(Sudoku));
         }
 
         public override void Join(Guid userGuid)
@@ -29,9 +35,9 @@ namespace Sudoku.Engine.Core
             throw new NotImplementedException();
         }
 
-        public override void AddNumber(int row, int column, int value, Guid userGuid)
+        public override void AddNumber(ISudokuNumber number)
         {
-            ConcurrentNumbersQueue.TryAdd(new SudokuNumber(row, column, value, userGuid));
+            ConcurrentNumbersQueue.TryAdd(number);
         }
 
         public override void Leave(Guid userGuid)
@@ -71,7 +77,6 @@ namespace Sudoku.Engine.Core
             }
 
             IsActive = false;
-            return;
         }
     }
 }

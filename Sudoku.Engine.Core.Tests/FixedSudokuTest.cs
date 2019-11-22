@@ -19,7 +19,7 @@ namespace Sudoku.Engine.Core.Tests
         public void TestSolve_RightSolution()
         {
             _sudokuGame.NewGame();
-            _sudokuGame.AddNumber(0, 1, 2, Guid.NewGuid());
+            _sudokuGame.AddNumber(TODO);
             Assert.True(_sudokuGame.Solve());
         }
 
@@ -27,7 +27,7 @@ namespace Sudoku.Engine.Core.Tests
         public void TestSolve_WrongSolution()
         {
             _sudokuGame.NewGame();
-            _sudokuGame.AddNumber(1, 4, 2, Guid.NewGuid());
+            _sudokuGame.AddNumber(TODO);
             Assert.False(_sudokuGame.Solve());
         }
     }

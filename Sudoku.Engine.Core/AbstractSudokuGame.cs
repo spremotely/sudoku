@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using Sudoku.Engine.Core.Contracts;
+using Sudoku.Engine.Core.Contracts.Models;
 using Sudoku.Engine.Core.Exceptions;
 
 namespace Sudoku.Engine.Core
@@ -47,22 +48,22 @@ namespace Sudoku.Engine.Core
             return Solver.Solve(Sudoku);
         }
 
-        public virtual void AddNumber(int row, int column, int value, Guid userGuid)
+        public virtual void AddNumber(ISudokuNumber number)
         {
             if (!IsActive)
             {
                 throw new AbstractSudokuGameException("sudoku is not active");
             }
 
-            if (value < 1 || value > Sudoku.GetLength(0))
+            if (number.Value < 1 || number.Value > Sudoku.GetLength(0))
             {
                 var exception = new AbstractSudokuGameException("incorrect value");
                 exception.Data["sudoku size"] = Sudoku.GetLength(0);
-                exception.Data["value"] = value;
+                exception.Data["value"] = number.Value;
                 throw exception;
             }
 
-            Sudoku[row, column] = value;
+            Sudoku[number.Row, number.Column] = number.Value;
         }
 
         public virtual void Join(Guid userGuid)

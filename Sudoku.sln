@@ -15,6 +15,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sudoku.Engine.Core", "Sudok
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sudoku.Engine.Core.Tests", "Sudoku.Engine.Core.Tests\Sudoku.Engine.Core.Tests.csproj", "{1F2FF8A7-0994-40C0-89B9-EA980AED2B68}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sudoku.Engine.Core.Concurrent", "Sudoku.Engine.Core.Concurrent\Sudoku.Engine.Core.Concurrent.csproj", "{66C026DB-82E8-4F65-9F95-EFD3D8466A0C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -37,6 +39,10 @@ Global
 		{1F2FF8A7-0994-40C0-89B9-EA980AED2B68}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1F2FF8A7-0994-40C0-89B9-EA980AED2B68}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1F2FF8A7-0994-40C0-89B9-EA980AED2B68}.Release|Any CPU.Build.0 = Release|Any CPU
+		{66C026DB-82E8-4F65-9F95-EFD3D8466A0C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{66C026DB-82E8-4F65-9F95-EFD3D8466A0C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{66C026DB-82E8-4F65-9F95-EFD3D8466A0C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{66C026DB-82E8-4F65-9F95-EFD3D8466A0C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -46,6 +52,7 @@ Global
 		{D318074E-0AB9-45DE-93FE-802D50EC56D1} = {E2D7BD02-E876-498A-89CA-BD266B2499B0}
 		{E141B000-A37B-4126-9611-401707546480} = {D318074E-0AB9-45DE-93FE-802D50EC56D1}
 		{1F2FF8A7-0994-40C0-89B9-EA980AED2B68} = {D318074E-0AB9-45DE-93FE-802D50EC56D1}
+		{66C026DB-82E8-4F65-9F95-EFD3D8466A0C} = {D318074E-0AB9-45DE-93FE-802D50EC56D1}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {50766CCD-F36C-4931-84CB-96C9A7119B86}
