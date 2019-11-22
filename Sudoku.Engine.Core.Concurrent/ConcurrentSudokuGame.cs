@@ -20,6 +20,9 @@ namespace Sudoku.Engine.Core.Concurrent
         public delegate void GameOverHandler(object sender);
         public event GameOverHandler OnGameOver;
 
+        public delegate void AddNumberHandler(object sender, AddNumberEventArgs e);
+        public event AddNumberHandler OnAddNumber;
+
         public ConcurrentSudokuGame(ISudokuGenerator generator, ISudokuSolver solver) : base(generator, solver)
         {
         }
@@ -42,7 +45,10 @@ namespace Sudoku.Engine.Core.Concurrent
 
         public override void AddNumber(ISudokuNumber number)
         {
-            ConcurrentNumbersQueue.TryAdd(number);
+            if (ConcurrentNumbersQueue.TryAdd(number))
+            {
+                OnAddNumber?.Invoke(this, new AddNumberEventArgs(number));
+            }
         }
 
         public override void Leave(Guid userGuid)
