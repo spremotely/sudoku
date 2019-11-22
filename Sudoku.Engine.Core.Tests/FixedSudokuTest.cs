@@ -1,5 +1,6 @@
 using System;
 using Sudoku.Engine.Core.Contracts;
+using Sudoku.Engine.Core.Models;
 using Xunit;
 
 namespace Sudoku.Engine.Core.Tests
@@ -19,7 +20,7 @@ namespace Sudoku.Engine.Core.Tests
         public void TestSolve_RightSolution()
         {
             _sudokuGame.NewGame();
-            _sudokuGame.AddNumber(TODO);
+            _sudokuGame.AddNumber(new SudokuNumber(0, 1, 2, Guid.NewGuid()));
             Assert.True(_sudokuGame.Solve());
         }
 
@@ -27,7 +28,7 @@ namespace Sudoku.Engine.Core.Tests
         public void TestSolve_WrongSolution()
         {
             _sudokuGame.NewGame();
-            _sudokuGame.AddNumber(TODO);
+            _sudokuGame.AddNumber(new SudokuNumber(0, 1, 4, Guid.NewGuid()));
             Assert.False(_sudokuGame.Solve());
         }
     }

@@ -12,8 +12,13 @@ namespace Sudoku.Engine.Core.Concurrent
         protected BlockingCollection<ISudokuNumber> ConcurrentNumbersQueue;
 
         public delegate void NewGameHandler(object sender, NewGameEventArgs e);
-
         public event NewGameHandler OnNewGame;
+
+        public delegate void SolvedGameHandler(object sender, SolvedGameEventArgs e);
+        public event SolvedGameHandler OnSolvedGame;
+
+        public delegate void GameOverHandler(object sender);
+        public event GameOverHandler OnGameOver;
 
         public ConcurrentSudokuGame(ISudokuGenerator generator, ISudokuSolver solver) : base(generator, solver)
         {
@@ -68,6 +73,7 @@ namespace Sudoku.Engine.Core.Concurrent
             if (!Solve())
             {
                 IsActive = false;
+                OnGameOver?.Invoke(this);
                 return;
             }
 
@@ -77,6 +83,7 @@ namespace Sudoku.Engine.Core.Concurrent
             }
 
             IsActive = false;
+            OnSolvedGame?.Invoke(this, new SolvedGameEventArgs(Guid.NewGuid()));
         }
     }
 }
