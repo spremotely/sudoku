@@ -62,24 +62,6 @@ namespace Sudoku.Engine.Core
                 exception.Data["value"] = number.Value;
                 throw exception;
             }
-
-            Sudoku[number.Row, number.Column] = number.Value;
-        }
-
-        public virtual void Join(Guid userGuid)
-        {
-            if (!IsActive)
-            {
-                throw new AbstractSudokuGameException("sudoku is not active");
-            }
-        }
-
-        public virtual void Leave(Guid userGuid)
-        {
-            if (!IsActive)
-            {
-                throw new AbstractSudokuGameException("sudoku is not active");
-            }
         }
 
         protected bool IsDone()

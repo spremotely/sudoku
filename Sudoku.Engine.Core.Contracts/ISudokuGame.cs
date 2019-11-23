@@ -7,8 +7,6 @@ namespace Sudoku.Engine.Core.Contracts
     {
         void NewGame();
         bool Solve();
-        void Join(Guid userGuid);
         void AddNumber(ISudokuNumber number);
-        void Leave(Guid userGuid);
     }
 }

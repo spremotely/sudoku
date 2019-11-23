@@ -9,6 +9,9 @@ namespace Sudoku.Engine.Core.Concurrent
 {
     public class ConcurrentSudokuGame : AbstractSudokuGame
     {
+        private readonly object _newGameLock = new object();
+        private  Thread _queueDispatcherThread;
+
         protected BlockingCollection<ISudokuNumber> ConcurrentNumbersQueue;
 
         public delegate void NewGameHandler(object sender, NewGameEventArgs e);
@@ -29,18 +32,18 @@ namespace Sudoku.Engine.Core.Concurrent
 
         public override void NewGame()
         {
-            base.NewGame();
+            lock (_newGameLock)
+            {
+                _queueDispatcherThread?.Abort();
 
-            ConcurrentNumbersQueue = new BlockingCollection<ISudokuNumber>();
-            var queueDispatcherThread = new Thread(QueueDispatcher);
-            queueDispatcherThread.Start();
+                base.NewGame();
 
-            OnNewGame?.Invoke(this, new NewGameEventArgs(Sudoku));
-        }
+                ConcurrentNumbersQueue = new BlockingCollection<ISudokuNumber>();
+                _queueDispatcherThread = new Thread(QueueDispatcher);
+                _queueDispatcherThread.Start();
 
-        public override void Join(Guid userGuid)
-        {
-            throw new NotImplementedException();
+                OnNewGame?.Invoke(this, new NewGameEventArgs(Sudoku));
+            }
         }
 
         public override void AddNumber(ISudokuNumber number)
@@ -49,11 +52,6 @@ namespace Sudoku.Engine.Core.Concurrent
             {
                 OnAddNumber?.Invoke(this, new AddNumberEventArgs(number));
             }
-        }
-
-        public override void Leave(Guid userGuid)
-        {
-            throw new NotImplementedException();
         }
 
         private void QueueDispatcher()
@@ -89,7 +87,7 @@ namespace Sudoku.Engine.Core.Concurrent
             }
 
             IsActive = false;
-            OnSolvedGame?.Invoke(this, new SolvedGameEventArgs(Guid.NewGuid()));
+            OnSolvedGame?.Invoke(this, new SolvedGameEventArgs(number.UserGuid));
         }
     }
 }
