@@ -34,7 +34,10 @@ namespace Sudoku.Engine.Core.Concurrent
         {
             lock (_newGameLock)
             {
-                _queueDispatcherThread?.Abort();
+                if (IsActive)
+                {
+                    return;
+                }
 
                 base.NewGame();
 
@@ -48,10 +51,7 @@ namespace Sudoku.Engine.Core.Concurrent
 
         public override void AddNumber(ISudokuNumber number)
         {
-            if (ConcurrentNumbersQueue.TryAdd(number))
-            {
-                OnAddNumber?.Invoke(this, new AddNumberEventArgs(number));
-            }
+            ConcurrentNumbersQueue.TryAdd(number);
         }
 
         private void QueueDispatcher()
@@ -73,6 +73,7 @@ namespace Sudoku.Engine.Core.Concurrent
             }
 
             Sudoku[number.Row, number.Column] = number.Value;
+            OnAddNumber?.Invoke(this, new AddNumberEventArgs(number));
 
             if (!Solve())
             {

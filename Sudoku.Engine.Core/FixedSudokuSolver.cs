@@ -5,7 +5,7 @@ namespace Sudoku.Engine.Core
     public class FixedSudokuSolver : ISudokuSolver
     {
 
-        private readonly int[,] _solution = {
+        protected readonly int[,] Solution = {
             { 7, 2, 3, 4, 6, 5, 8, 9, 1 },
             { 5, 6, 9, 1, 8, 3, 2, 4, 7 },
             { 8, 4, 1, 9, 7, 2, 5, 6, 3 },
@@ -23,7 +23,7 @@ namespace Sudoku.Engine.Core
             {
                 for (var j = 0; j < sudoku.GetLength(1); j++)
                 {
-                    if (sudoku[i, j] != 0 && sudoku[i, j] != _solution[i, j])
+                    if (sudoku[i, j] != 0 && sudoku[i, j] != Solution[i, j])
                     {
                         return false;
                     }
