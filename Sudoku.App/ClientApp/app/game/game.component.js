@@ -19,6 +19,9 @@ var GameComponent = /** @class */ (function () {
             [0, 1, 2, 3, 4, 5, 6, 7, 8]
         ];
         this.selected = [0, 0];
+        this.username = "";
+        this.isInGame = false;
+        this.isNewGame = true;
     }
     GameComponent.prototype.onFieldClick = function (i, j) {
         this.selected[0] = i;
