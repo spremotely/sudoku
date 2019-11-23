@@ -1,0 +1,56 @@
+﻿.game {
+    margin: auto;
+    width: 500px;
+}
+
+.game__column {
+    border-right: 1px solid gray;
+    height: 55px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+}
+
+.game__column_left {
+    border-left: 5px solid black;
+}
+
+.game__column_right {
+    border-right: 5px solid black;
+}
+
+.game__row {
+    border-bottom: 1px solid black
+}
+
+.game__row_top {
+    border-top: 5px solid black;
+}
+
+.game__row_bottom {
+    border-bottom: 5px solid black;
+}
+
+.game__column_hover {
+    border: 2px solid green;
+}
+
+.game__column_selected_changeable {
+    background: aquamarine;
+}
+
+.game__column_selected_unchangeable {
+    background: crimson;
+}
+
+
+.join-game-form {
+    margin: auto;
+    width: 500px;
+    text-align: center;
+}
+
+.join-game-form .ng-invalid.ng-touched {
+    border-color: crimson;
+}

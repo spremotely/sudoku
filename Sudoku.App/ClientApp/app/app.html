@@ -1,0 +1,14 @@
+﻿<div class="app">
+	<ul class="nav justify-content-center nav-pills">
+		<li class="nav-item">
+			<a [ngClass]="{'active': currentView == 'game'}" (click)="setView('game')" class="nav-link" href="#">Game</a>
+		</li>
+		<li class="nav-item">
+			<a [ngClass]="{'active': currentView == 'rating'}" (click)="setView('rating')" class="nav-link" href="#">Rating</a>
+		</li>
+	</ul>
+
+	<div class="app__content">
+		<game *ngIf="currentView == 'game'"></game>
+	</div>
+</div>
