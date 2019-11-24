@@ -1,7 +1,10 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.SignalR;
+using Sudoku.App.Exceptions;
 using Sudoku.Data.Contracts;
 using Sudoku.Engine.Core.Contracts;
 
@@ -46,6 +49,25 @@ namespace Sudoku.App.Hubs
             {
                 gamers.Select(u => u.Name)
             });
+        }
+
+        public void LeaveGame()
+        {
+            if (!_game.LeaveGame(Context.ConnectionId))
+            {
+                var exception = new SudokuHubException("user can not leave game");
+                exception.Data["connection id"] = Context.ConnectionId;
+                throw exception;
+            }
+
+            ListGamers();
+        }
+
+        public override Task OnDisconnectedAsync(Exception exception)
+        {
+            LeaveGame();
+
+            return base.OnDisconnectedAsync(exception);
         }
     }
 }
