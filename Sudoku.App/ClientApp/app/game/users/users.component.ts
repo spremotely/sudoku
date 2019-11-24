@@ -1,5 +1,6 @@
 ﻿import { Component } from '@angular/core';
-import { GameService } from '../../services/game.service';
+import { GameService } from './../../services/game.service';
+import { StorageService } from './../../services/storage.service';
 
 @Component({
 	selector: 'users',
@@ -7,13 +8,18 @@ import { GameService } from '../../services/game.service';
 	templateUrl: 'users.html'
 })
 export class UsersComponent {
-	gamers: string[] = [];
+	username: string;
+	gamers: string[];
 
-	constructor(private gameService: GameService)
+	constructor(private gameService: GameService, private storageService: StorageService)
 	{
+		this.username = storageService.get("username");
+		this.gamers = storageService.get("UsersComponent.gamers");
+
 		gameService.users.subscribe((value) =>
 		{
 			this.gamers = value;
+			storageService.add("UsersComponent.gamers", this.gamers);
 		});
 	}
 }

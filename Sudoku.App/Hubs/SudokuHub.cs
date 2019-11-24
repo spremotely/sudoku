@@ -54,7 +54,12 @@ namespace Sudoku.App.Hubs
             {
                 await Clients.All.SendCoreAsync("AddNumber", new object[]
                 {
-                    row, column, value
+                    new SudokuNumber
+                    {
+                        Row = row,
+                        Column = column,
+                        Value = value
+                    }
                 });
             }
         }

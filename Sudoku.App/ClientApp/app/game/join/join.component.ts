@@ -1,6 +1,7 @@
 ﻿import { Component } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { GameService } from '../../services/game.service';
+import { StorageService } from './../../services/storage.service';
 
 @Component({
 	selector: 'join',
@@ -8,10 +9,10 @@ import { GameService } from '../../services/game.service';
 	templateUrl: 'join.html'
 })
 export class JoinComponent {
-	username: string = undefined;
-	errorMessage: string = undefined;
+	username: string;
+	errorMessage: string;
 
-	constructor(private gameService: GameService)
+	constructor(private gameService: GameService, private storageService: StorageService)
 	{
 		gameService.joinStatus.subscribe((value) =>
 		{
@@ -29,6 +30,7 @@ export class JoinComponent {
 	{
 		if (form.valid)
 		{
+			this.storageService.add("username", form.value.username);
 			this.gameService.joinGame(form.value.username);
 		}
 	}

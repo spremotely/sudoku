@@ -9,13 +9,23 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 import { Component } from '@angular/core';
 import { GameService } from '../../services/game.service';
+import { StorageService } from './../../services/storage.service';
 var JoinComponent = /** @class */ (function () {
-    function JoinComponent(gameService) {
+    function JoinComponent(gameService, storageService) {
+        var _this = this;
         this.gameService = gameService;
-        this.username = "";
+        this.storageService = storageService;
+        gameService.joinStatus.subscribe(function (value) {
+            if (!value.isSuccess) {
+                _this.errorMessage = value.errorMessage;
+                return;
+            }
+            _this.errorMessage = undefined;
+        });
     }
     JoinComponent.prototype.onSubmit = function (form) {
         if (form.valid) {
+            this.storageService.add("username", form.value.username);
             this.gameService.joinGame(form.value.username);
         }
     };
@@ -25,7 +35,7 @@ var JoinComponent = /** @class */ (function () {
             styleUrls: ['join.css'],
             templateUrl: 'join.html'
         }),
-        __metadata("design:paramtypes", [GameService])
+        __metadata("design:paramtypes", [GameService, StorageService])
     ], JoinComponent);
     return JoinComponent;
 }());

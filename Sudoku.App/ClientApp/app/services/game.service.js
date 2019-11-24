@@ -14,6 +14,9 @@ var GameService = /** @class */ (function () {
     function GameService() {
         this.connection = undefined;
         this.joinStatus = new Subject();
+        this.users = new Subject();
+        this.sudoku = new Subject();
+        this.number = new Subject();
         this.init();
     }
     GameService.prototype.init = function () {
@@ -26,9 +29,21 @@ var GameService = /** @class */ (function () {
         this.connection.on("JoinGame", function (joinStatus) {
             _this.joinStatus.next(joinStatus);
         });
+        this.connection.on("ListGamers", function (gamers) {
+            _this.users.next(gamers);
+        });
+        this.connection.on("GetSudoku", function (sudoku) {
+            _this.sudoku.next(sudoku);
+        });
+        this.connection.on("AddNumber", function (number) {
+            _this.number.next(number);
+        });
     };
     GameService.prototype.joinGame = function (username) {
         this.connection.invoke("JoinGame", username);
+    };
+    GameService.prototype.addNumber = function (row, column, value) {
+        this.connection.invoke("AddNumber", row, column, value);
     };
     GameService = __decorate([
         Injectable({

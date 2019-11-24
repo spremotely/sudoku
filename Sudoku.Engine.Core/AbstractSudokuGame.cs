@@ -117,14 +117,14 @@ namespace Sudoku.Engine.Core
 
             Sudoku[row, column] = value;
 
-            if (!Solve())
+            if (!IsDone())
             {
-                Status = SudokuGameStatus.GameOver;
                 return true;
             }
 
-            if (!IsDone())
+            if (!Solve())
             {
+                Status = SudokuGameStatus.GameOver;
                 return true;
             }
 

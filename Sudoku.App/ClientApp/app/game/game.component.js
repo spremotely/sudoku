@@ -9,14 +9,16 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 import { Component } from '@angular/core';
 import { GameService } from './../services/game.service';
+import { StorageService } from './../services/storage.service';
 var GameComponent = /** @class */ (function () {
-    function GameComponent(gameService) {
+    function GameComponent(gameService, storageService) {
         var _this = this;
         this.gameService = gameService;
-        this.joinedToGame = false;
+        this.storageService = storageService;
+        this.joinedToGame = storageService.get("GameComponent.joinedToGame");
         gameService.joinStatus.subscribe(function (value) {
-            console.log(value);
             _this.joinedToGame = value.isSuccess;
+            storageService.add("GameComponent.joinedToGame", _this.joinedToGame);
         });
     }
     GameComponent = __decorate([
@@ -25,7 +27,7 @@ var GameComponent = /** @class */ (function () {
             styleUrls: ['game.css'],
             templateUrl: 'game.html'
         }),
-        __metadata("design:paramtypes", [GameService])
+        __metadata("design:paramtypes", [GameService, StorageService])
     ], GameComponent);
     return GameComponent;
 }());

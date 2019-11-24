@@ -2,6 +2,7 @@
 import { Subject } from 'rxjs';
 import { HubConnection, HubConnectionBuilder } from '@aspnet/signalr';
 import { JoinStatus } from './../models/models';
+import { SudokuNumber } from './../models/models';
 
 @Injectable({
 	providedIn: 'root',
@@ -11,6 +12,8 @@ export class GameService {
 
 	joinStatus = new Subject<JoinStatus>();
 	users = new Subject<string[]>();
+	sudoku = new Subject<number[][]>();
+	number = new Subject<SudokuNumber>();
 
 	constructor()
 	{
@@ -38,10 +41,27 @@ export class GameService {
 			{
 				this.users.next(gamers);
 			});
+
+		this.connection.on("GetSudoku",
+			(sudoku: number[][]) =>
+			{
+				this.sudoku.next(sudoku);
+			});
+
+		this.connection.on("AddNumber",
+			(number: SudokuNumber) =>
+			{
+				this.number.next(number);
+			});
 	}
 
 	joinGame(username: string)
 	{
 		this.connection.invoke("JoinGame", username);
+	}
+
+	addNumber(row: number, column: number, value: number)
+	{
+		this.connection.invoke("AddNumber", row, column, value);
 	}
 }
