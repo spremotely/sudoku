@@ -1,6 +1,6 @@
 ﻿import { Component } from '@angular/core';
-import { GameService } from '../../services/game.service';
 import { NgForm } from '@angular/forms';
+import { GameService } from '../../services/game.service';
 
 @Component({
 	selector: 'join',
@@ -8,18 +8,28 @@ import { NgForm } from '@angular/forms';
 	templateUrl: 'join.html'
 })
 export class JoinComponent {
-	username = "";
+	username: string = undefined;
+	errorMessage: string = undefined;
 
-	constructor()
+	constructor(private gameService: GameService)
 	{
-		GameService.init();
+		gameService.joinStatus.subscribe((value) =>
+		{
+			if (!value.isSuccess)
+			{
+				this.errorMessage = value.errorMessage;
+				return;
+			}
+
+			this.errorMessage = undefined;
+		});
 	}
 
 	onSubmit(form: NgForm)
 	{
 		if (form.valid)
 		{
-			GameService.join(form.value.username);
+			this.gameService.joinGame(form.value.username);
 		}
 	}
 }

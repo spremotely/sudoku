@@ -5,3 +5,9 @@
 }
 
 .join-form__container .ng-invalid.ng-touched { border-color: crimson; }
+
+.join-form__error {
+    color: crimson;
+    font-style: italic;
+    padding-bottom: 20px;
+}

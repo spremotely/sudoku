@@ -7,5 +7,6 @@
 		       placeholder="Enter username"
 		       [(ngModel)]="username" name="username">
 	</div>
+	<div *ngIf="errorMessage" class="join-form__error">{{ errorMessage }}</div>
 	<button type="submit" class="btn btn-primary">Join game</button>
 </form>

@@ -4,59 +4,37 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
 import { Injectable } from '@angular/core';
-import { HubService } from './../services/hub.service';
+import { Subject } from 'rxjs';
+import { HubConnectionBuilder } from '@aspnet/signalr';
 var GameService = /** @class */ (function () {
     function GameService() {
+        this.connection = undefined;
+        this.joinStatus = new Subject();
+        this.init();
     }
-    GameService.init = function () {
+    GameService.prototype.init = function () {
         var _this = this;
-        if (this.isInitialized) {
+        if (this.connection) {
             return;
         }
-        HubService.startConnection();
-        HubService.onJoinGame(function (isSuccess, message) {
-            _this.isJoined = isSuccess;
-            _this.message = message;
-        });
-        HubService.onListGamers(function (gamers) {
-            _this.gamers = gamers;
-        });
-        HubService.onGetSudoku(function (sudoku) {
-            _this.sudoku = sudoku;
+        this.connection = new HubConnectionBuilder().withUrl("http://localhost:51255/sudokuHub").build();
+        this.connection.start().catch(function (err) { return console.error(err.toString()); });
+        this.connection.on("JoinGame", function (joinStatus) {
+            _this.joinStatus.next(joinStatus);
         });
     };
-    GameService.join = function (username) {
-        HubService.joinGame(username);
+    GameService.prototype.joinGame = function (username) {
+        this.connection.invoke("JoinGame", username);
     };
-    GameService.onJoinGame = function (callback) {
-        HubService.onJoinGame(callback);
-    };
-    GameService.onListGamers = function (callback) {
-        HubService.onListGamers(callback);
-    };
-    GameService.onGetSudoku = function (callback) {
-        HubService.onGetSudoku(callback);
-    };
-    GameService.isInitialized = false;
-    GameService.isJoined = false;
-    GameService.gamers = [];
-    GameService.sudoku = [
-        [0, 0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0, 0]
-    ];
-    GameService.selected = [0, 0];
     GameService = __decorate([
         Injectable({
             providedIn: 'root',
-        })
+        }),
+        __metadata("design:paramtypes", [])
     ], GameService);
     return GameService;
 }());

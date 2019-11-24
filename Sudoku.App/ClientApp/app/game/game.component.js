@@ -10,24 +10,22 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 import { Component } from '@angular/core';
 import { GameService } from './../services/game.service';
 var GameComponent = /** @class */ (function () {
-    function GameComponent() {
-        this.hasGameAccess = false;
-        GameService.init();
-        this.hasGameAccess = GameService.isJoined;
-    }
-    GameComponent.prototype.ngOnInit = function () {
+    function GameComponent(gameService) {
         var _this = this;
-        GameService.onJoinGame(function (isSuccess, message) {
-            _this.hasGameAccess = isSuccess;
+        this.gameService = gameService;
+        this.joinedToGame = false;
+        gameService.joinStatus.subscribe(function (value) {
+            console.log(value);
+            _this.joinedToGame = value.isSuccess;
         });
-    };
+    }
     GameComponent = __decorate([
         Component({
             selector: 'game',
             styleUrls: ['game.css'],
             templateUrl: 'game.html'
         }),
-        __metadata("design:paramtypes", [])
+        __metadata("design:paramtypes", [GameService])
     ], GameComponent);
     return GameComponent;
 }());

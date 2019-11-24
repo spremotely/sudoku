@@ -7,19 +7,13 @@ import { GameService } from './../services/game.service';
 	templateUrl: 'game.html'
 })
 export class GameComponent {
-	hasGameAccess = false;
+	joinedToGame: boolean = false;
 
-	constructor()
+	constructor(private gameService: GameService)
 	{
-		GameService.init();
-		this.hasGameAccess = GameService.isJoined;
-	}
-
-	ngOnInit()
-	{
-		GameService.onJoinGame((isSuccess: boolean, message: string) =>
+		gameService.joinStatus.subscribe((value) =>
 		{
-			this.hasGameAccess = isSuccess;
+			this.joinedToGame = value.isSuccess;
 		});
 	}
 }

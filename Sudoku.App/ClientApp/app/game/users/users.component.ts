@@ -9,17 +9,11 @@ import { GameService } from '../../services/game.service';
 export class UsersComponent {
 	gamers: string[] = [];
 
-	constructor()
+	constructor(private gameService: GameService)
 	{
-		GameService.init();
-		this.gamers = GameService.gamers;
-	}
-
-	ngOnInit()
-	{
-		GameService.onListGamers((users: string[]) =>
+		gameService.users.subscribe((value) =>
 		{
-			this.gamers = users;
+			this.gamers = value;
 		});
 	}
 }

@@ -10,13 +10,13 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 import { Component } from '@angular/core';
 import { GameService } from '../../services/game.service';
 var JoinComponent = /** @class */ (function () {
-    function JoinComponent() {
+    function JoinComponent(gameService) {
+        this.gameService = gameService;
         this.username = "";
-        GameService.init();
     }
     JoinComponent.prototype.onSubmit = function (form) {
         if (form.valid) {
-            GameService.join(form.value.username);
+            this.gameService.joinGame(form.value.username);
         }
     };
     JoinComponent = __decorate([
@@ -25,7 +25,7 @@ var JoinComponent = /** @class */ (function () {
             styleUrls: ['join.css'],
             templateUrl: 'join.html'
         }),
-        __metadata("design:paramtypes", [])
+        __metadata("design:paramtypes", [GameService])
     ], JoinComponent);
     return JoinComponent;
 }());

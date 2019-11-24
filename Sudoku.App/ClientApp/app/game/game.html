@@ -1,5 +1,5 @@
 ﻿<div class="game">
-	<join *ngIf="!hasGameAccess"></join>
-	<users *ngIf="hasGameAccess"></users>
-	<field *ngIf="hasGameAccess"></field>
+	<join *ngIf="!joinedToGame"></join>
+	<users *ngIf="joinedToGame"></users>
+	<field *ngIf="joinedToGame"></field>
 </div>

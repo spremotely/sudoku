@@ -1,71 +1,47 @@
 ﻿import { Injectable } from '@angular/core';
-import { HubService } from './../services/hub.service';
+import { Subject } from 'rxjs';
+import { HubConnection, HubConnectionBuilder } from '@aspnet/signalr';
+import { JoinStatus } from './../models/models';
 
 @Injectable({
 	providedIn: 'root',
 })
 export class GameService {
-	private static isInitialized = false;
+	private connection: HubConnection = undefined;
 
-	static isJoined = false;
-	static message: string;
-	static gamers: string[] = [];
-	static sudoku: number[][] = [
-		[0, 0, 0, 0, 0, 0, 0, 0, 0],
-		[0, 0, 0, 0, 0, 0, 0, 0, 0],
-		[0, 0, 0, 0, 0, 0, 0, 0, 0],
-		[0, 0, 0, 0, 0, 0, 0, 0, 0],
-		[0, 0, 0, 0, 0, 0, 0, 0, 0],
-		[0, 0, 0, 0, 0, 0, 0, 0, 0],
-		[0, 0, 0, 0, 0, 0, 0, 0, 0],
-		[0, 0, 0, 0, 0, 0, 0, 0, 0],
-		[0, 0, 0, 0, 0, 0, 0, 0, 0]
-	];
-	static selected: number[] = [0, 0];
+	joinStatus = new Subject<JoinStatus>();
+	users = new Subject<string[]>();
 
-	static init()
+	constructor()
 	{
-		if (this.isInitialized)
+		this.init();
+	}
+
+	private init()
+	{
+		if (this.connection)
 		{
 			return;
 		}
 
-		HubService.startConnection();
+		this.connection = new HubConnectionBuilder().withUrl("http://localhost:51255/sudokuHub").build();
+		this.connection.start().catch(err => console.error(err.toString()));
 
-		HubService.onJoinGame((isSuccess: boolean, message: string) =>
-		{
-			this.isJoined = isSuccess;
-			this.message = message;
-		});
+		this.connection.on("JoinGame",
+			(joinStatus: JoinStatus) =>
+			{
+				this.joinStatus.next(joinStatus);
+			});
 
-		HubService.onListGamers((gamers: string[]) =>
-		{
-			this.gamers = gamers;
-		});
-
-		HubService.onGetSudoku((sudoku: number[][]) =>
-		{
-			this.sudoku = sudoku;
-		});
+		this.connection.on("ListGamers",
+			(gamers: string[]) =>
+			{
+				this.users.next(gamers);
+			});
 	}
 
-	static join(username: string)
+	joinGame(username: string)
 	{
-		HubService.joinGame(username);
-	}
-
-	static onJoinGame(callback: (isSuccess: boolean, message: string) => any)
-	{
-		HubService.onJoinGame(callback);
-	}
-
-	static onListGamers(callback: (users: string[]) => any)
-	{
-		HubService.onListGamers(callback);
-	}
-
-	static onGetSudoku(callback: (sudoku: number[][]) => any)
-	{
-		HubService.onGetSudoku(callback);
+		this.connection.invoke("JoinGame", username);
 	}
 }
