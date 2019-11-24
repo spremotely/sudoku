@@ -4,36 +4,30 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
 import { Component } from '@angular/core';
+import { GameService } from './../services/game.service';
 var GameComponent = /** @class */ (function () {
     function GameComponent() {
-        this.sudoku = [
-            [0, 1, 2, 3, 4, 5, 6, 7, 8],
-            [0, 1, 2, 3, 4, 5, 6, 7, 8],
-            [0, 1, 2, 3, 4, 5, 6, 7, 8],
-            [0, 1, 2, 3, 4, 5, 6, 7, 8],
-            [0, 1, 2, 3, 4, 5, 6, 7, 8],
-            [0, 1, 2, 3, 4, 5, 6, 7, 8],
-            [0, 1, 2, 3, 4, 5, 6, 7, 8],
-            [0, 1, 2, 3, 4, 5, 6, 7, 8],
-            [0, 1, 2, 3, 4, 5, 6, 7, 8]
-        ];
-        this.selected = [0, 0];
-        this.username = "";
-        this.isInGame = false;
-        this.isNewGame = true;
+        this.hasGameAccess = false;
+        GameService.init();
+        this.hasGameAccess = GameService.isJoined;
     }
-    GameComponent.prototype.onFieldClick = function (i, j) {
-        this.selected[0] = i;
-        this.selected[1] = j;
+    GameComponent.prototype.ngOnInit = function () {
+        var _this = this;
+        GameService.onJoinGame(function (isSuccess, message) {
+            _this.hasGameAccess = isSuccess;
+        });
     };
-    ;
     GameComponent = __decorate([
         Component({
             selector: 'game',
             styleUrls: ['game.css'],
             templateUrl: 'game.html'
-        })
+        }),
+        __metadata("design:paramtypes", [])
     ], GameComponent);
     return GameComponent;
 }());

@@ -12,7 +12,6 @@ var AppComponent = /** @class */ (function () {
     AppComponent.prototype.setView = function (view) {
         this.currentView = view;
     };
-    ;
     AppComponent = __decorate([
         Component({
             selector: 'app',

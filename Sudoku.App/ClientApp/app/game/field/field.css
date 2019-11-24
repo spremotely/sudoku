@@ -1,0 +1,40 @@
+﻿.field__column {
+    border-right: 1px solid gray;
+    height: 55px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+}
+
+.field__column_left {
+    border-left: 5px solid black;
+}
+
+.field__column_right {
+    border-right: 5px solid black;
+}
+
+.field__row {
+    border-bottom: 1px solid black
+}
+
+.field__row_top {
+    border-top: 5px solid black;
+}
+
+.field__row_bottom {
+    border-bottom: 5px solid black;
+}
+
+.field__column_hover {
+    border: 2px solid green;
+}
+
+.field__column_selected_changeable {
+    background: aquamarine;
+}
+
+.field__column_selected_unchangeable {
+    background: crimson;
+}

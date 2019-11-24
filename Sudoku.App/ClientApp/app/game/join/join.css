@@ -1,0 +1,7 @@
+﻿.join-form {
+    margin: auto;
+    width: 500px;
+    text-align: center;
+}
+
+.join-form__container .ng-invalid.ng-touched { border-color: crimson; }

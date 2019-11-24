@@ -3,6 +3,10 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.SpaServices.Webpack;
 using Microsoft.Extensions.DependencyInjection;
 using Sudoku.App.Hubs;
+using Sudoku.Data.Contracts;
+using Sudoku.Data.InMemory;
+using Sudoku.Engine.Core;
+using Sudoku.Engine.Core.Contracts;
 
 namespace Sudoku.App
 {
@@ -13,6 +17,9 @@ namespace Sudoku.App
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddSignalR();
+            services.AddSingleton<IUserRepository, InMemoryUserRepository>();
+            services.AddSingleton<ISudokuGenerator, FixedSudokuGenerator>();
+            services.AddSingleton<ISudokuSolver, FixedSudokuSolver>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

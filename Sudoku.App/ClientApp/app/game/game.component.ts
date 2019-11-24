@@ -1,4 +1,5 @@
 ﻿import { Component } from '@angular/core';
+import { GameService } from './../services/game.service';
 
 @Component({
 	selector: 'game',
@@ -6,27 +7,19 @@
 	templateUrl: 'game.html'
 })
 export class GameComponent {
-	sudoku = [
-		[0, 1, 2, 3, 4, 5, 6, 7, 8],
-		[0, 1, 2, 3, 4, 5, 6, 7, 8],
-		[0, 1, 2, 3, 4, 5, 6, 7, 8],
-		[0, 1, 2, 3, 4, 5, 6, 7, 8],
-		[0, 1, 2, 3, 4, 5, 6, 7, 8],
-		[0, 1, 2, 3, 4, 5, 6, 7, 8],
-		[0, 1, 2, 3, 4, 5, 6, 7, 8],
-		[0, 1, 2, 3, 4, 5, 6, 7, 8],
-		[0, 1, 2, 3, 4, 5, 6, 7, 8]
-	];
+	hasGameAccess = false;
 
-	selected = [0, 0];
+	constructor()
+	{
+		GameService.init();
+		this.hasGameAccess = GameService.isJoined;
+	}
 
-	username = "";
-
-	isInGame = false;
-	isNewGame = true;
-
-	onFieldClick(i: number, j: number) {
-		this.selected[0] = i;
-		this.selected[1] = j;
-	};
+	ngOnInit()
+	{
+		GameService.onJoinGame((isSuccess: boolean, message: string) =>
+		{
+			this.hasGameAccess = isSuccess;
+		});
+	}
 }

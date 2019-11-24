@@ -11,5 +11,5 @@ export class AppComponent {
 	setView(view: string)
 	{
 		this.currentView = view;
-	};
+	}
 }
