@@ -11,6 +11,7 @@ namespace Sudoku.Engine.Core.Contracts
         bool LeaveGame(string session);
         bool AddNumber(int row, int column, int value, Guid userGuid);
         IList<Guid> ListGamers();
+        Guid GetGamer(string session);
         SudokuGameStatus GameStatus();
         int[,] GetSudoku();
         Guid? GetWinner();

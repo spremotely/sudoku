@@ -75,6 +75,11 @@ namespace Sudoku.Engine.Core
             return SessionMapper.List();
         }
 
+        public Guid GetGamer(string session)
+        {
+            return SessionMapper.Get(session);
+        }
+
         public virtual SudokuGameStatus GameStatus()
         {
             return Status;
