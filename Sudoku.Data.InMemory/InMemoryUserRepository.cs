@@ -75,5 +75,13 @@ namespace Sudoku.Data.InMemory
                 return _users.OrderByDescending(u => u.Wins).Cast<IUser>().Take(limit).ToList();
             }
         }
+
+        public IList<IUser> ListByGuids(IList<Guid> guids)
+        {
+            lock (_users)
+            {
+                return _users.Where(u => guids.Contains(u.Guid)).Cast<IUser>().ToList();
+            }
+        }
     }
 }

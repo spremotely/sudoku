@@ -49,7 +49,7 @@ namespace Sudoku.Engine.Core
                 return false;
             }
 
-            if (SessionMapper.Add(session, userGuid))
+            if (!SessionMapper.Add(session, userGuid))
             {
                 var exception = new AbstractSudokuGameException("cannot connect user");
                 exception.Data["session"] = session;
