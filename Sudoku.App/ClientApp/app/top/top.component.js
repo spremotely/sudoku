@@ -8,9 +8,14 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 import { Component, Input } from '@angular/core';
+import { GameService } from "./../services/game.service";
 var TopComponent = /** @class */ (function () {
-    function TopComponent() {
+    function TopComponent(gameService) {
+        this.gameService = gameService;
     }
+    TopComponent.prototype.ngOnInit = function () {
+        this.gameService.getTop();
+    };
     __decorate([
         Input(),
         __metadata("design:type", Array)
@@ -20,7 +25,8 @@ var TopComponent = /** @class */ (function () {
             selector: 'top',
             styleUrls: ['top.css'],
             templateUrl: 'top.html'
-        })
+        }),
+        __metadata("design:paramtypes", [GameService])
     ], TopComponent);
     return TopComponent;
 }());
