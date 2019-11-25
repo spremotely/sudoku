@@ -1,0 +1,12 @@
+﻿<form *ngIf="!userGuid" #form="ngForm" class="join-form" (ngSubmit)="onSubmit(form)">
+	<div class="join-form__container form-group">
+		<input required
+		       minlength="3"
+		       type="text"
+		       class="form-control"
+		       placeholder="Enter username"
+		       [(ngModel)]="userName" name="userName">
+	</div>
+	<div *ngIf="errorMessage" class="join-form__error">{{ errorMessage }}</div>
+	<button type="submit" class="btn btn-primary">Join game</button>
+</form>

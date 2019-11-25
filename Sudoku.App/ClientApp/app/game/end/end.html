@@ -1,0 +1,10 @@
+﻿<div *ngIf="status && status !== 'NotActive' && status !== 'InProgress'" class="end">
+	<div *ngIf="status && status === 'GameOver'" class="end__game-over">
+		<div>GAME OVER!</div>
+	</div>
+	<div *ngIf="status && status === 'Solved'" class="end__solved">
+		<div class="end__solver-title">GAME SOLVED!</div>
+		<div *ngIf="winner" class="end__solver-winner">WINNER: {{ winner.name }}</div>
+	</div>
+	<button (click)="onNewGame()" class="end__new-game-button btn btn-primary">New game</button>
+</div>

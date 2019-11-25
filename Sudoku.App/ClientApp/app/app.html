@@ -9,6 +9,14 @@
 	</ul>
 
 	<div class="app__content">
-		<game *ngIf="currentView == 'game'"></game>
+		<div *ngIf="currentView === 'game'" class="game-view">
+			<join *ngIf="!user"></join>
+			<users *ngIf="user" [user]="user" [gamers]="gamers"></users>
+			<end *ngIf="user" [status]="status" [winner]="winner"></end>
+			<field *ngIf="user && status === 'InProgress'" [sudoku]="sudoku"></field>
+		</div>
+		<div *ngIf="currentView === 'rating'" class="top-view">
+			<top [top]="top"></top>
+		</div>
 	</div>
 </div>

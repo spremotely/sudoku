@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Sudoku.Engine.Core.Contracts;
 using Sudoku.Engine.Core.Contracts.Models;
@@ -8,17 +9,20 @@ namespace Sudoku.Engine.Core
 {
     public abstract class AbstractSudokuGame : ISudokuGame
     {
-        protected ISudokuGenerator Generator;
-        protected ISudokuSolver Solver;
+        protected readonly ISudokuGenerator Generator;
+        protected readonly ISudokuSolver Solver;
+        protected readonly ISessionMapper<Guid> SessionMapper;
+        protected SudokuGameStatus Status = SudokuGameStatus.NotActive;
+        protected Guid? Winner = null;
 
-        protected AbstractSudokuGame(ISudokuGenerator generator, ISudokuSolver solver)
+        protected virtual int[,] Sudoku { get; set; }
+
+        protected AbstractSudokuGame(ISudokuGenerator generator, ISudokuSolver solver, ISessionMapper<Guid> sessionMapper)
         {
             Generator = generator;
             Solver = solver;
+            this.SessionMapper = sessionMapper;
         }
-
-        protected virtual int[,] Sudoku { get; set; }
-        protected bool IsActive { get; set; }
 
         public virtual void NewGame()
         {
@@ -26,11 +30,11 @@ namespace Sudoku.Engine.Core
 
             if (Sudoku.GetLength(0) == Sudoku.GetLength(1))
             {
-                IsActive = true;
+                Status = SudokuGameStatus.InProgress;
                 return;
             }
 
-            IsActive = false;
+            Status = SudokuGameStatus.NotActive;
 
             var exception = new AbstractSudokuGameException("incorrect sudoku size");
             exception.Data["rows"] = Sudoku.GetLength(0);
@@ -38,35 +42,110 @@ namespace Sudoku.Engine.Core
             throw exception;
         }
 
-        public virtual bool Solve()
+        public virtual bool JoinGame(string session, Guid userGuid)
         {
-            if (!IsActive)
+            if (SessionMapper.Contains(userGuid))
             {
-                throw new AbstractSudokuGameException("sudoku is not active");
+                return false;
             }
 
-            return Solver.Solve(Sudoku);
+            if (!SessionMapper.Add(session, userGuid))
+            {
+                var exception = new AbstractSudokuGameException("cannot connect user");
+                exception.Data["session"] = session;
+                exception.Data["user guid"] = userGuid;
+                throw exception;
+            }
+
+            if (Status == SudokuGameStatus.NotActive)
+            {
+                NewGame();
+            }
+
+            return true;
         }
 
-        public virtual void AddNumber(ISudokuNumber number)
+        public virtual bool LeaveGame(string session)
         {
-            if (!IsActive)
+            return SessionMapper.Remove(session);
+        }
+
+        public virtual IList<Guid> ListGamers()
+        {
+            return SessionMapper.List();
+        }
+
+        public Guid GetGamer(string session)
+        {
+            return SessionMapper.Get(session);
+        }
+
+        public virtual SudokuGameStatus GameStatus()
+        {
+            return Status;
+        }
+
+        public virtual int[,] GetSudoku()
+        {
+            return Sudoku;
+        }
+
+        public virtual Guid? GetWinner()
+        {
+            return Winner;
+        }
+
+        public virtual bool AddNumber(int row, int column, int value, Guid userGuid)
+        {
+            if (Status != SudokuGameStatus.InProgress)
             {
-                throw new AbstractSudokuGameException("sudoku is not active");
+                throw new AbstractSudokuGameException("sudoku is not in progress");
             }
 
-            if (number.Value < 1 || number.Value > Sudoku.GetLength(0))
+            if (value < 1 || value > Sudoku.GetLength(0))
             {
                 var exception = new AbstractSudokuGameException("incorrect value");
                 exception.Data["sudoku size"] = Sudoku.GetLength(0);
-                exception.Data["value"] = number.Value;
+                exception.Data["value"] = value;
                 throw exception;
             }
+
+            if (Sudoku[row, column] != 0)
+            {
+                return false;
+            }
+
+            Sudoku[row, column] = value;
+
+            if (!IsDone())
+            {
+                return true;
+            }
+
+            if (!Solve())
+            {
+                Status = SudokuGameStatus.GameOver;
+                return true;
+            }
+
+            Status = SudokuGameStatus.Solved;
+            Winner = userGuid;
+            return true;
         }
 
         protected bool IsDone()
         {
             return Sudoku.Cast<int>().All(value => value != 0);
+        }
+
+        protected bool Solve()
+        {
+            if (Status != SudokuGameStatus.InProgress)
+            {
+                throw new AbstractSudokuGameException("sudoku is not in progress");
+            }
+
+            return Solver.Solve(Sudoku);
         }
     }
 }

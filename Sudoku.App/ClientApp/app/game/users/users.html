@@ -1,0 +1,10 @@
+﻿<div class="gamers">
+	<div class="gamers__current">
+		Current gamer:
+		<span *ngIf="user.name">{{ user.name }}</span>
+	</div>
+	<div class="gamers__in-game">
+		Gamers:
+		<span *ngIf="gamers">{{ gamers.join(", ") }}</span>
+	</div>
+</div>

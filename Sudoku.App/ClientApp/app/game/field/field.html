@@ -1,0 +1,22 @@
+﻿<div class="field">
+	<div class="row field__row"
+	     [ngClass]="
+			{
+				'field__row_top': i == 0 || i % (sudoku.length / 3) == 0,
+				'field__row_bottom': i == sudoku.length - 1
+			}"
+	     *ngFor="let row of sudoku; let i = index">
+		<div class="col field__column"
+		     [ngClass]="
+				{
+					'field__column_left': j == 0 || j % (row.length / 3) == 0,
+					'field__column_right': j == row.length - 1,
+					'field__column_selected_changeable': i == selected[0] && j == selected[1] && column == 0,
+					'field__column_selected_unchangeable': i == selected[0] && j == selected[1] && column != 0
+				}"
+		     *ngFor="let column of row; let j = index"
+		     (click)="onNumberFieldClick(i, j)">
+			{{ column != 0 ? column : ""}}
+		</div>
+	</div>
+</div>
