@@ -1,8 +1,7 @@
 ﻿import { Injectable } from '@angular/core';
 import { Subject } from 'rxjs';
 import { HubConnection, HubConnectionBuilder } from '@aspnet/signalr';
-import { JoinStatus } from './../models/models';
-import { SudokuNumber } from './../models/models';
+import { SudokuNumber, User } from './../models/models';
 
 @Injectable({
 	providedIn: 'root',
@@ -10,10 +9,13 @@ import { SudokuNumber } from './../models/models';
 export class GameService {
 	private connection: HubConnection = undefined;
 
-	joinStatus = new Subject<JoinStatus>();
-	users = new Subject<string[]>();
+	user = new Subject<User>();
+	gamers = new Subject<string[]>();
 	sudoku = new Subject<number[][]>();
 	number = new Subject<SudokuNumber>();
+	status = new Subject<string>();
+	winner = new Subject<User>();
+	top = new Subject<User[]>();
 
 	constructor()
 	{
@@ -31,15 +33,18 @@ export class GameService {
 		this.connection.start().catch(err => console.error(err.toString()));
 
 		this.connection.on("JoinGame",
-			(joinStatus: JoinStatus) =>
+			(user: User) =>
 			{
-				this.joinStatus.next(joinStatus);
+				this.user.next(user);
+				this.listGamers();
+				this.getSudoku();
+				this.gameStatus();
 			});
 
 		this.connection.on("ListGamers",
 			(gamers: string[]) =>
 			{
-				this.users.next(gamers);
+				this.gamers.next(gamers);
 			});
 
 		this.connection.on("GetSudoku",
@@ -52,16 +57,75 @@ export class GameService {
 			(number: SudokuNumber) =>
 			{
 				this.number.next(number);
+				this.gameStatus();
+			});
+
+		this.connection.on("GameStatus",
+			(status: string) =>
+			{
+				this.status.next(status);
+				if (status === "Solved")
+				{
+					this.getWinner();
+				}
+			});
+
+		this.connection.on("GetWinner",
+			(winner: User) =>
+			{
+				this.winner.next(winner);
+			});
+
+		this.connection.on("GetTop",
+			(top: User[]) =>
+			{
+				this.top.next(top);
+			});
+
+		this.connection.on("UpdateTop",
+			(top: User[]) =>
+			{
+				this.top.next(top);
 			});
 	}
 
-	joinGame(username: string)
+	joinGame(userName: string)
 	{
-		this.connection.invoke("JoinGame", username);
+		this.connection.invoke("JoinGame", userName);
 	}
 
 	addNumber(row: number, column: number, value: number)
 	{
 		this.connection.invoke("AddNumber", row, column, value);
+	}
+
+	newGame()
+	{
+		this.connection.invoke("NewGame");
+	}
+
+	listGamers()
+	{
+		this.connection.invoke("ListGamers");
+	}
+
+	getSudoku()
+	{
+		this.connection.invoke("GetSudoku");
+	}
+
+	gameStatus()
+	{
+		this.connection.invoke("GameStatus");
+	}
+
+	getWinner()
+	{
+		this.connection.invoke("GetWinner");
+	}
+
+	getTop()
+	{
+		this.connection.invoke("GetTop");
 	}
 }

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using Sudoku.Engine.Core.Contracts;
 using Sudoku.Engine.Core.Contracts.Models;
 

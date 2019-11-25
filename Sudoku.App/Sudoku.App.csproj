@@ -8,13 +8,13 @@
   <ItemGroup>
     <TypeScriptCompile Remove="ClientApp\app.component.ts" />
     <TypeScriptCompile Remove="ClientApp\app.module.ts" />
+    <TypeScriptCompile Remove="ClientApp\app\game\end\end.component.ts" />
     <TypeScriptCompile Remove="ClientApp\app\game\field\field.component.ts" />
-    <TypeScriptCompile Remove="ClientApp\app\game\game.component.ts" />
     <TypeScriptCompile Remove="ClientApp\app\game\join\join.component.ts" />
     <TypeScriptCompile Remove="ClientApp\app\game\users\users.component.ts" />
     <TypeScriptCompile Remove="ClientApp\app\models\models.ts" />
     <TypeScriptCompile Remove="ClientApp\app\services\game.service.ts" />
-    <TypeScriptCompile Remove="ClientApp\app\services\storage.service.ts" />
+    <TypeScriptCompile Remove="ClientApp\app\top\top.component.ts" />
     <TypeScriptCompile Remove="ClientApp\main.ts" />
     <TypeScriptCompile Remove="ClientApp\polyfills.ts" />
   </ItemGroup>

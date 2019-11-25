@@ -52,22 +52,6 @@ namespace Sudoku.Data.InMemory
             }
         }
 
-        public IUser UpdateDefeats(Guid guid, int defeats)
-        {
-            lock (_users)
-            {
-                var existingUser = GetByGuid(guid);
-
-                if (!(existingUser is User existingConcreteUser))
-                {
-                    return null;
-                }
-
-                existingConcreteUser.Defeats = defeats;
-                return existingUser;
-            }
-        }
-
         public IList<IUser> Top(int limit = 10)
         {
             lock (_users)

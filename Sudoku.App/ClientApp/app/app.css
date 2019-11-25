@@ -1,3 +1,13 @@
 ﻿.app { margin-top: 50px; }
 
 .app__content { margin-top: 50px; }
+
+.game-view {
+    margin: auto;
+    width: 500px;
+}
+
+.top-view {
+    margin: auto;
+    width: 500px;
+}

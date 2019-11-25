@@ -7,6 +7,5 @@ namespace Sudoku.Data.Contracts
         Guid Guid { get; }
         string Name { get; }
         int Wins { get; }
-        int Defeats { get; }
     }
 }

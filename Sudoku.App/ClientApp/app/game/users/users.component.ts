@@ -1,6 +1,6 @@
-﻿import { Component } from '@angular/core';
+﻿import { Component, Input } from '@angular/core';
 import { GameService } from './../../services/game.service';
-import { StorageService } from './../../services/storage.service';
+import { User } from "./../../models/models";
 
 @Component({
 	selector: 'users',
@@ -8,18 +8,13 @@ import { StorageService } from './../../services/storage.service';
 	templateUrl: 'users.html'
 })
 export class UsersComponent {
-	username: string;
+	@Input()
+	user: User;
+
+	@Input()
 	gamers: string[];
 
-	constructor(private gameService: GameService, private storageService: StorageService)
+	constructor(private gameService: GameService)
 	{
-		this.username = storageService.get("username");
-		this.gamers = storageService.get("UsersComponent.gamers");
-
-		gameService.users.subscribe((value) =>
-		{
-			this.gamers = value;
-			storageService.add("UsersComponent.gamers", this.gamers);
-		});
 	}
 }

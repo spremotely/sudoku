@@ -13,10 +13,13 @@ import { HubConnectionBuilder } from '@aspnet/signalr';
 var GameService = /** @class */ (function () {
     function GameService() {
         this.connection = undefined;
-        this.joinStatus = new Subject();
-        this.users = new Subject();
+        this.user = new Subject();
+        this.gamers = new Subject();
         this.sudoku = new Subject();
         this.number = new Subject();
+        this.status = new Subject();
+        this.winner = new Subject();
+        this.top = new Subject();
         this.init();
     }
     GameService.prototype.init = function () {
@@ -26,24 +29,61 @@ var GameService = /** @class */ (function () {
         }
         this.connection = new HubConnectionBuilder().withUrl("http://localhost:51255/sudokuHub").build();
         this.connection.start().catch(function (err) { return console.error(err.toString()); });
-        this.connection.on("JoinGame", function (joinStatus) {
-            _this.joinStatus.next(joinStatus);
+        this.connection.on("JoinGame", function (user) {
+            _this.user.next(user);
+            _this.listGamers();
+            _this.getSudoku();
+            _this.gameStatus();
         });
         this.connection.on("ListGamers", function (gamers) {
-            _this.users.next(gamers);
+            _this.gamers.next(gamers);
         });
         this.connection.on("GetSudoku", function (sudoku) {
             _this.sudoku.next(sudoku);
         });
         this.connection.on("AddNumber", function (number) {
             _this.number.next(number);
+            _this.gameStatus();
+        });
+        this.connection.on("GameStatus", function (status) {
+            _this.status.next(status);
+            if (status === "Solved") {
+                _this.getWinner();
+            }
+        });
+        this.connection.on("GetWinner", function (winner) {
+            _this.winner.next(winner);
+        });
+        this.connection.on("GetTop", function (top) {
+            _this.top.next(top);
+        });
+        this.connection.on("UpdateTop", function (top) {
+            _this.top.next(top);
         });
     };
-    GameService.prototype.joinGame = function (username) {
-        this.connection.invoke("JoinGame", username);
+    GameService.prototype.joinGame = function (userName) {
+        this.connection.invoke("JoinGame", userName);
     };
     GameService.prototype.addNumber = function (row, column, value) {
         this.connection.invoke("AddNumber", row, column, value);
+    };
+    GameService.prototype.newGame = function () {
+        this.connection.invoke("NewGame");
+    };
+    GameService.prototype.listGamers = function () {
+        this.connection.invoke("ListGamers");
+    };
+    GameService.prototype.getSudoku = function () {
+        this.connection.invoke("GetSudoku");
+    };
+    GameService.prototype.gameStatus = function () {
+        this.connection.invoke("GameStatus");
+    };
+    GameService.prototype.getWinner = function () {
+        this.connection.invoke("GetWinner");
+    };
+    GameService.prototype.getTop = function () {
+        this.connection.invoke("GetTop");
     };
     GameService = __decorate([
         Injectable({

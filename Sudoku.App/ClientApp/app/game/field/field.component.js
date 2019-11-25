@@ -7,32 +7,17 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { GameService } from './../../services/game.service';
-import { StorageService } from './../../services/storage.service';
 import { HostListener } from '@angular/core';
 var FieldComponent = /** @class */ (function () {
-    function FieldComponent(gameService, storageService) {
-        var _this = this;
+    function FieldComponent(gameService) {
         this.gameService = gameService;
-        this.storageService = storageService;
-        this.sudoku = storageService.get("FieldComponent.sudoku");
-        this.selected = storageService.get("FieldComponent.selected");
-        if (!this.selected) {
-            this.selected = [0, 0];
-        }
-        gameService.sudoku.subscribe(function (value) {
-            _this.sudoku = value;
-            storageService.add("FieldComponent.sudoku", _this.sudoku);
-        });
-        gameService.number.subscribe(function (value) {
-            _this.sudoku[value.row][value.column] = value.value;
-        });
+        this.selected = [0, 0];
     }
     FieldComponent.prototype.onNumberFieldClick = function (i, j) {
         this.selected[0] = i;
         this.selected[1] = j;
-        this.storageService.add("FieldComponent.selected", this.selected);
     };
     FieldComponent.prototype.onKeyDown = function (event) {
         var number = Number(event.key);
@@ -48,6 +33,10 @@ var FieldComponent = /** @class */ (function () {
         this.gameService.addNumber(this.selected[0], this.selected[1], number);
     };
     __decorate([
+        Input(),
+        __metadata("design:type", Array)
+    ], FieldComponent.prototype, "sudoku", void 0);
+    __decorate([
         HostListener('window:keydown', ['$event']),
         __metadata("design:type", Function),
         __metadata("design:paramtypes", [KeyboardEvent]),
@@ -59,7 +48,7 @@ var FieldComponent = /** @class */ (function () {
             styleUrls: ['field.css'],
             templateUrl: 'field.html'
         }),
-        __metadata("design:paramtypes", [GameService, StorageService])
+        __metadata("design:paramtypes", [GameService])
     ], FieldComponent);
     return FieldComponent;
 }());

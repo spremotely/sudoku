@@ -8,7 +8,6 @@ namespace Sudoku.Data.InMemory
         public Guid Guid { get; }
         public string Name { get; set; }
         public int Wins { get; set; }
-        public int Defeats { get; set; }
 
         public User(string name)
         {

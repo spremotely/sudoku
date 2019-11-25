@@ -4,8 +4,9 @@ import { FormsModule } from '@angular/forms';
 import { AppComponent } from './app.component';
 import { JoinComponent } from './game/join/join.component';
 import { FieldComponent } from './game/field/field.component';
-import { GameComponent } from './game/game.component';
 import { UsersComponent } from './game/users/users.component';
+import { EndComponent } from './game/end/end.component';
+import { TopComponent } from './top/top.component';
 
 @NgModule({
 	imports: [BrowserModule, FormsModule],
@@ -14,7 +15,8 @@ import { UsersComponent } from './game/users/users.component';
 		FieldComponent,
 		JoinComponent,
 		UsersComponent,
-		GameComponent
+		EndComponent,
+		TopComponent
 	],
 	bootstrap: [AppComponent]
 })

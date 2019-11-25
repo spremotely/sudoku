@@ -10,7 +10,6 @@ namespace Sudoku.Data.Contracts
         IUser GetByGuid(Guid guid);
         IUser Create(string name);
         IUser UpdateWins(Guid guid, int wins);
-        IUser UpdateDefeats(Guid guid, int defeats);
         IList<IUser> Top(int limit = 10);
         IList<IUser> ListByGuids(IList<Guid> guids);
     }

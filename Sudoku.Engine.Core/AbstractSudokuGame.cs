@@ -57,7 +57,7 @@ namespace Sudoku.Engine.Core
                 throw exception;
             }
 
-            if (Status != SudokuGameStatus.InProgress)
+            if (Status == SudokuGameStatus.NotActive)
             {
                 NewGame();
             }

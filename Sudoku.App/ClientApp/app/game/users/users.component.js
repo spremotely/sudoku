@@ -7,28 +7,27 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { GameService } from './../../services/game.service';
-import { StorageService } from './../../services/storage.service';
 var UsersComponent = /** @class */ (function () {
-    function UsersComponent(gameService, storageService) {
-        var _this = this;
+    function UsersComponent(gameService) {
         this.gameService = gameService;
-        this.storageService = storageService;
-        this.username = storageService.get("username");
-        this.gamers = storageService.get("UsersComponent.gamers");
-        gameService.users.subscribe(function (value) {
-            _this.gamers = value;
-            storageService.add("UsersComponent.gamers", _this.gamers);
-        });
     }
+    __decorate([
+        Input(),
+        __metadata("design:type", Object)
+    ], UsersComponent.prototype, "user", void 0);
+    __decorate([
+        Input(),
+        __metadata("design:type", Array)
+    ], UsersComponent.prototype, "gamers", void 0);
     UsersComponent = __decorate([
         Component({
             selector: 'users',
             styleUrls: ['users.css'],
             templateUrl: 'users.html'
         }),
-        __metadata("design:paramtypes", [GameService, StorageService])
+        __metadata("design:paramtypes", [GameService])
     ], UsersComponent);
     return UsersComponent;
 }());

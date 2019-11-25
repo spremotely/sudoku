@@ -6,6 +6,7 @@ using Sudoku.App.Exceptions;
 using Sudoku.App.Models;
 using Sudoku.Data.Contracts;
 using Sudoku.Engine.Core.Contracts;
+using Sudoku.Engine.Core.Contracts.Models;
 
 namespace Sudoku.App.Hubs
 {
@@ -20,47 +21,70 @@ namespace Sudoku.App.Hubs
             _userRepository = userRepository;
         }
 
-        public async Task JoinGame(string username)
+        public async Task JoinGame(string userName)
         {
-            var user = _userRepository.GetByName(username) ?? _userRepository.Create(username);
+            var user = _userRepository.GetByName(userName) ?? _userRepository.Create(userName);
             if (!_game.JoinGame(Context.ConnectionId, user.Guid))
             {
                 await Clients.Caller.SendCoreAsync("JoinGame", new object[]
                 {
-                    new JoinStatus
-                    {
-                        IsSuccess = false,
-                        ErrorMessage = "this user can't join to game"
-                    }
+                    null
                 });
+
                 return;
             }
 
             await Clients.Caller.SendCoreAsync("JoinGame", new object[]
             {
-                new JoinStatus
-                {
-                    IsSuccess = true
-                }
+                user
             });
+        }
 
-            await ListGamers();
-            await GetSudoku();
+        public void NewGame()
+        {
+            _game.NewGame();
         }
 
         public async Task AddNumber(int row, int column, int value)
         {
-            if (_game.AddNumber(row, column, value, _game.GetGamer(Context.ConnectionId)))
+            if (!_game.AddNumber(row, column, value, _game.GetGamer(Context.ConnectionId)))
             {
-                await Clients.All.SendCoreAsync("AddNumber", new object[]
+                return;
+            }
+
+            await Clients.All.SendCoreAsync("AddNumber", new object[]
+            {
+                new SudokuNumber
                 {
-                    new SudokuNumber
-                    {
-                        Row = row,
-                        Column = column,
-                        Value = value
-                    }
-                });
+                    Row = row,
+                    Column = column,
+                    Value = value
+                }
+            });
+
+            if (_game.GameStatus() == SudokuGameStatus.Solved)
+            {
+                var winnerGuid = _game.GetWinner();
+
+                if (winnerGuid == null)
+                {
+                    var exception = new SudokuHubException("winner not found in game");
+                    exception.Data["connection id"] = Context.ConnectionId;
+                    throw exception;
+                }
+
+                var winner = _userRepository.GetByGuid(winnerGuid.Value);
+
+                if (winner == null)
+                {
+                    var exception = new SudokuHubException("winner not found in repository");
+                    exception.Data["connection id"] = Context.ConnectionId;
+                    throw exception;
+                }
+
+                _userRepository.UpdateWins(winner.Guid, winner.Wins + 1);
+
+                await UpdateTop();
             }
         }
 
@@ -68,15 +92,37 @@ namespace Sudoku.App.Hubs
         {
             await Clients.All.SendCoreAsync("GameStatus", new object[]
             {
-                _game.GameStatus()
+                _game.GameStatus().ToString()
             });
         }
 
         public async Task GetSudoku()
         {
-            await Clients.Caller.SendCoreAsync("GetSudoku", new object[]
+            await Clients.All.SendCoreAsync("GetSudoku", new object[]
             {
                 _game.GetSudoku()
+            });
+        }
+
+        public async Task GetWinner()
+        {
+            var winnerGuid = _game.GetWinner();
+
+            if (winnerGuid == null)
+            {
+                return;
+            }
+
+            var user = _userRepository.GetByGuid(winnerGuid.Value);
+
+            if (user == null)
+            {
+                return;
+            }
+
+            await Clients.All.SendCoreAsync("GetWinner", new object[]
+            {
+                user
             });
         }
 
@@ -99,6 +145,22 @@ namespace Sudoku.App.Hubs
             }
 
             await ListGamers();
+        }
+
+        public async Task GetTop()
+        {
+            await Clients.Caller.SendCoreAsync("GetTop", new object[]
+            {
+                _userRepository.Top()
+            });
+        }
+
+        public async Task UpdateTop()
+        {
+            await Clients.All.SendCoreAsync("UpdateTop", new object[]
+            {
+                _userRepository.Top()
+            });
         }
 
         public override async Task OnDisconnectedAsync(Exception exception)
